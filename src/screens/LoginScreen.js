@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Input, Image } from 'react-native-elements'
 import { KeyboardAvoidingView } from 'react-native'
-import { useEffect } from 'react';
 import { auth } from '../config/firebase';
+import { LogBox } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
+    
+    LogBox.ignoreLogs(['Setting a timer']);
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     useEffect(() => {
-        const unsubcribe = auth.onAuthStateChanged((authUser) => {
+        const unsubscribe = auth.onAuthStateChanged((authUser) => {
+            //console.log(authUser)
             if (authUser) {
                 navigation.replace('Home')
             }
         })
-        return unsubcribe
+        return unsubscribe
     })
 
     const signIn = () => {
-
+        auth.signInWithEmailAndPassword(email, password).catch((error) => alert(error))
     }
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -43,7 +47,9 @@ const LoginScreen = ({ navigation }) => {
                     secureTextEntry
                     type="password"
                     value={password}
-                    onChangeText={(password) => setPassword(password)} />
+                    onChangeText={(password) => setPassword(password)}
+                    onSubmitEditing={signIn}
+                />
             </View>
             <Button containerStyle={styles.button} title='Login' onPress={signIn} />
             <Button containerStyle={styles.button} type='outline' title='Register' onPress={() => navigation.navigate('Register')} />

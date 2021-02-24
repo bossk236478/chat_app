@@ -21,9 +21,9 @@ const RegisterScreen = ({ navigation }) => {
         auth
             .createUserWithEmailAndPassword(email, password)
             .then(authUser => {
-                authUser.user.updateEmail({
+                authUser.user.updateProfile({
                     displayName: name,
-                    photoUrl: imageUrl || "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png"
+                    photoURL: imageUrl || "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png"
                 })
             })
             .catch((error) => alert(error.message))
@@ -38,9 +38,9 @@ const RegisterScreen = ({ navigation }) => {
                 <Input
                     placeholder="Full Name"
                     autoFocus
-                    type="text"
+                    type="name"
                     value={name}
-                    onChangeText={(name) => setName(name)}
+                    onChangeText={(text) => setName(text)}
                 />
                 <Input
                     placeholder="Email"
